@@ -170,10 +170,12 @@ export default class Parser {
    * of `@(...)` with corresponding parameter values obtained from `this.parameters`. If
    * `isInRavenFormate` is false, it directly retrieves the parameter value for the entire `
    */
-  parameterExecuter(html: string, isInRavenFormate: boolean = true) {
+  parameterExecuter(html: string, isInRavenFormate: boolean = true, parameters: Record<string, any> | undefined = undefined) {
+    const params = parameters || this.parameters;
+
     if (isInRavenFormate) {
       return html.replace(/@\(.*?\)/g, match => {
-        if (!this.parameters) return '';
+        if (!params) return '';
 
         const inner = match.slice(2, -1).trim();
         let firstValue: string, optionalValue: string;
@@ -187,11 +189,11 @@ export default class Parser {
           optionalValue = inner.split('||')?.[0]?.trim();
 
           return (
-            this.getValue(this.parameters, firstValue) ||
-            this.getValue(this.parameters, optionalValue)
+            this.getValue(params, firstValue) ||
+            this.getValue(params, optionalValue)
           );
         }
-        return this.getValue(this.parameters, inner);
+        return this.getValue(params, inner);
       });
     } else {
       if (!this.parameters) return '';
@@ -227,21 +229,19 @@ export default class Parser {
 
     const tokenizer: Lexer = new Lexer(codeBlock, '', true);
     const tokens: Token[] = tokenizer.start();
-
-    arr.forEach((e, _i) => {
-      const parser: Parser = new Parser(
-        tokens,
-        { [key]: e, _i, ...this.parameters },
-        this.__view,
-        this.scope,
-        undefined,
-        undefined,
-        this.functions,
-      );
-      const parsed: string = parser.htmlParser('');
-
-      html += parser.parameterExecuter(parsed);
-    });
+    const parser: Parser = new Parser(
+      tokens,
+      { ...this.parameters },
+      this.__view,
+      this.scope,
+      undefined,
+      undefined,
+      this.functions,
+    );
+    const parsed: string = parser.htmlParser('');
+    for (let i = 0; i < arr.length; i++) {
+      html += parser.parameterExecuter(parsed, true, { ...this.parameters, [key]: arr[i], _i: i });
+    }
 
     return html;
   }
@@ -963,7 +963,7 @@ export default class Parser {
         while (
           this.currentToken &&
           this.currentToken.value.match(REGEX_CLOSING_TAG)?.[1].trim() !==
-            componentName
+          componentName
         ) {
           slotTokens.push(this.currentToken);
           this.eat();
