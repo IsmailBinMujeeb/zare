@@ -1,0 +1,13 @@
+as Base import "../base"
+
+link "/css/errorNotFound"
+
+serve (
+    <Base>
+        <main class="not-found">
+            <h1 class="error-code">404</h1>
+            <p class="error-message">Oops. The page you’re looking for doesn’t exist.</p>
+            <a href="/" class="home-link">← Return to Homepage</a>
+        </main>
+    </Base>
+)

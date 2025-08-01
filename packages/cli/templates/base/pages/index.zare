@@ -1,0 +1,33 @@
+as Base import "../base"
+as Navbar import "../components/navbar"
+as Footer import "../components/footer"
+
+link "/css/index"
+
+serve (
+    <Base>
+        <Navbar/>
+        <main class="main-content">
+            <section class="hero">
+                <h1>Zare</h1>
+                <p>Super Modular Template Engine</p>
+            </section>
+
+            <section class="features">
+            <div class="feature-card">
+                <h2>Effortless Templating</h2>
+                <p>Create dynamic and reusable templates with simple, readable syntax.</p>
+            </div>
+            <div class="feature-card">
+                <h2>Fast Performance</h2>
+                <p>Engineered for speed, ensuring a seamless user experience.</p>
+            </div>
+            <div class="feature-card">
+                <h2>Highly Extensible</h2>
+                <p>Easily customize and extend functionality to fit any web application.</p>
+            </div>
+            </section>
+        </main>
+        <Footer/>
+    </Base>
+)

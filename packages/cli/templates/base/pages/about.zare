@@ -1,0 +1,11 @@
+link "/static/css/style"
+import "/static/css/main"
+as Base import "../base"
+
+
+serve (
+    <Base>
+        <h1>About Page</h1>
+    </Base>
+    
+)

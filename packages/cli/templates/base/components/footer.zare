@@ -1,0 +1,22 @@
+link "/css/footer"
+
+serve (
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">⚡Zare</div>
+            <ul class="footer-links">
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="footer-socials">
+                <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+            <div class="footer-copy">&copy; 2025 Zare. All rights reserved.</div>
+        </div>
+    </footer>
+
+)

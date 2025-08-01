@@ -1,0 +1,51 @@
+.main-content {
+    padding: 2rem;
+    text-align: center;
+}
+
+.hero {
+    padding: 4rem 1rem;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    color: #bbb;
+    font-size: 1.1rem;
+}
+
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.feature-card {
+    background-color: transparent;
+    padding: 2rem;
+    border: 1px solid #222;
+    border-radius: 12px;
+    width: 280px;
+    transition: border-color 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.feature-card:hover {
+    border-color: var(--hover-color);
+}
+
+.feature-card h2 {
+    margin-bottom: 0.8rem;
+    font-size: 1.3rem;
+}
+
+.feature-card p {
+    color: #aaa;
+    font-size: 0.95rem;
+}

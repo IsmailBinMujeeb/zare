@@ -10,6 +10,7 @@
     "test": "vitest run",
     "docs:start": "cd docs && npm start",
     "docs:build": "cd docs && npm run build",
+    "cli:start": "cd packages/cli && npm run dev",
     "coverage": "vitest run --coverage",
     "licenses": "node scripts/copy-licenses.js",
     "prepare": "husky",

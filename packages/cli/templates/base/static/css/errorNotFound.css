@@ -1,0 +1,36 @@
+.not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    text-align: center;
+    padding: 2rem;
+}
+
+.error-code {
+    font-size: 6rem;
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.error-message {
+    font-size: 1.25rem;
+    color: #aaa;
+    margin-bottom: 2rem;
+}
+
+.home-link {
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 0.7rem 1.5rem;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.home-link:hover {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}

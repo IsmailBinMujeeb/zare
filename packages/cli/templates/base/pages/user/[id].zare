@@ -1,0 +1,13 @@
+as Base import "../../base"
+as Navbar import "../../components/navbar"
+as Footer import "../../components/footer"
+
+serve (
+    <Base>
+        <Navbar/>
+        <p style="text-align: center; padding: 20px;">
+            @(params.id)
+        </p>        
+        <Footer/>
+    </Base>
+)
