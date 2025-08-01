@@ -1,6 +1,6 @@
 {
   "name": "@zare/cli",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "bin": {
     "zare": "./dist/index.js"
@@ -26,7 +26,7 @@
     "fs-extra": "^7.0.1",
     "inquirer": "^12.9.0",
     "ora": "^8.2.0",
-    "zare": "^2.5.1"
+    "zare": "^2.5.2"
   },
   "repository": {
     "type": "git",
