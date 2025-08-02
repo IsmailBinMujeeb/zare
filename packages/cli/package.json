@@ -1,6 +1,6 @@
 {
-  "name": "@zare/cli",
-  "version": "1.0.1",
+  "name": "@zarejs/cli",
+  "version": "1.0.0",
   "bin": {
     "zare": "./dist/index.js"
   },
