@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- 4695622: package organization changed
+
+## 1.0.1
+
+### Patch Changes
+
 - 9e3b376: fixed the initiale release for @zare/cli
 
 ## 1.0.0
