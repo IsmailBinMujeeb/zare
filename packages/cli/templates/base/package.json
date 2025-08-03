@@ -1,14 +1,14 @@
 {
-    "name": "my-project",
-    "version": "0.0.0",
-    "description": "A brief description of the project.",
-    "scripts": {
-        "serve": "zare serve myapp",
-        "build": "zare build myapp"
-    },
-    "keywords": [],
-    "author": "Your Name",
-    "license": "MIT",
-    "dependencies": {},
-    "devDependencies": {}
+  "name": "my-project",
+  "version": "0.0.0",
+  "description": "A brief description of the project.",
+  "scripts": {
+    "serve": "zare serve myapp",
+    "build": "zare build myapp"
+  },
+  "keywords": [],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
 }

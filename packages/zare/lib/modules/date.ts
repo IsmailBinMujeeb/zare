@@ -44,7 +44,7 @@ export default [
     fnParams: ['date'],
     fnBody: `const d = new Date(date); return d.getTime()`,
   },
-  { fnName: 'getNow', fnParams: ['dare'], fnBody: `return Date.now()` },
+  { fnName: 'getNow', fnParams: [], fnBody: `return Date.now()` },
   {
     fnName: 'getUTCFullYear',
     fnParams: ['date'],

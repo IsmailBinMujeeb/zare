@@ -10,11 +10,11 @@ export default [
   {
     fnName: 'isInteger',
     fnParams: ['num'],
-    fnBody: `return Number.isInteger(Number(num))`,
+    fnBody: `return Number.isInteger(parseInt(num))`,
   },
   {
     fnName: 'isSafeInteger',
     fnParams: ['num'],
-    fnBody: `return Number.isSafeInteger(Number(num))`,
+    fnBody: `return Number.isSafeInteger(parseInt(num))`,
   },
 ];

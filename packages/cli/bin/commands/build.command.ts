@@ -1,66 +1,76 @@
-import { Command } from "commander";
-import path from "path";
-import fs from "fs-extra";
-import { logger } from "../utils/logger";
-import renderer from "zare/dist/core/renderer.js";
-import { loadZareConfig } from "../utils/loadZareConfig";
+import { Command } from 'commander';
+import path from 'path';
+import fs from 'fs-extra';
+import { logger } from '../utils/logger';
+import renderer from 'zare/dist/core/renderer.js';
+import { loadZareConfig } from '../utils/loadZareConfig';
 
 export function buildCommand(program: Command) {
+  program.command('build <projectPath>').action(async (projectPath: string) => {
+    try {
+      const zareConfigurations = await loadZareConfig(
+        path.resolve(process.cwd(), projectPath),
+      );
 
-    program
-        .command("build <projectPath>")
-        .action(async (projectPath: string) => {
-            try {
+      const projectDestination = path.resolve(
+        process.cwd(),
+        projectPath,
+        zareConfigurations.pages,
+      );
+      const outDir = path.resolve(
+        process.cwd(),
+        projectPath,
+        zareConfigurations.outdir,
+      );
 
-                const zareConfigurations = await loadZareConfig(path.resolve(process.cwd(), projectPath));
+      logger.action('checking project destination');
+      // Check if project directory exist or not
+      if (!(await fs.pathExists(projectDestination))) {
+        logger.error(`Project folder does not exists: ${projectDestination}`);
+        process.exit(1);
+      }
 
-                const projectDestination = path.resolve(process.cwd(), projectPath, zareConfigurations.pages);
-                const outDir = path.resolve(process.cwd(), projectPath, zareConfigurations.outdir);
+      // Check if outdir exist if not create one.
+      if (!(await fs.pathExists(outDir))) {
+        await fs.mkdir(outDir);
+        logger.info('output directory created');
+      }
 
-                logger.action("checking project destination")
-                // Check if project directory exist or not
-                if (!await fs.pathExists(projectDestination)) {
-                    logger.error(`Project folder does not exists: ${projectDestination}`)
-                    process.exit(1);
-                }
+      logger.action('loading pages');
+      const pagesFile = await fs.readdir(projectDestination, 'utf-8');
 
-                // Check if outdir exist if not create one.
-                if (!await fs.pathExists(outDir)) {
-                    await fs.mkdir(outDir)
-                    logger.info("output directory created")
-                }
+      for (const file of pagesFile) {
+        const filePath = path.resolve(projectDestination, file).trimEnd();
+        const fileExtension = path.extname(filePath).toLowerCase();
 
-                logger.action("loading pages")
-                const pagesFile = await fs.readdir(projectDestination, 'utf-8');
+        if (fileExtension !== '.zare') {
+          logger.warn(`can't load ${fileExtension} files`);
+          continue;
+        }
 
-                for (const file of pagesFile) {
-                    const filePath = path.resolve(projectDestination, file).trimEnd();
-                    const fileExtension = path.extname(filePath).toLowerCase();
+        const fileBaseName = path.basename(filePath, fileExtension);
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const outputHtmlContent = await renderer(fileContent, {}, filePath);
 
-                    if (fileExtension !== ".zare") {
-                        logger.warn(`can't load ${fileExtension} files`)
-                        continue;
-                    };
+        const outputHtmlFileNameWithExtension = `${fileBaseName}.html`;
+        const outputHtmlFilePath = path.resolve(
+          outDir,
+          outputHtmlFileNameWithExtension,
+        );
 
-                    const fileBaseName = path.basename(filePath, fileExtension);
-                    const fileContent = await fs.readFile(filePath, "utf-8");
-                    const outputHtmlContent = await renderer(fileContent, {}, filePath)
+        if (!(await fs.exists(outputHtmlFilePath))) {
+          await fs.createFile(outputHtmlFilePath);
+        }
 
-                    const outputHtmlFileNameWithExtension = `${fileBaseName}.html`;
-                    const outputHtmlFilePath = path.resolve(outDir, outputHtmlFileNameWithExtension);
+        await fs.writeFile(outputHtmlFilePath, outputHtmlContent);
+      }
 
-                    if (!await fs.exists(outputHtmlFilePath)) {
-                        await fs.createFile(outputHtmlFilePath)
-                    }
-
-                    await fs.writeFile(outputHtmlFilePath, outputHtmlContent);
-                }
-
-                logger.done("build complete")
-            } catch (error) {
-                if (error instanceof Error) logger.error(`Failed to build project: ${error.message}`);
-                else logger.error(`${error}`);
-                process.exit(1);
-            }
-        })
+      logger.done('build complete');
+    } catch (error) {
+      if (error instanceof Error)
+        logger.error(`Failed to build project: ${error.message}`);
+      else logger.error(`${error}`);
+      process.exit(1);
+    }
+  });
 }

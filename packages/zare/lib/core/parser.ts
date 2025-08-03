@@ -9,6 +9,7 @@ import fs from 'fs';
 import path from 'path';
 import Syntax_Error from '../errors/syntaxError.js';
 import Template_Error from '../errors/templateError.js';
+import { findNodeModules } from '../utils/helper.js';
 
 const REGEX_ARRAY_INDEX = /\[(\w+)\]/g;
 const REGEX_DOUBLE_QUOTE_KEY = /\["(.*?)"\]/g;
@@ -25,7 +26,7 @@ const REGEX_SCRIPT_TAG = /^<script.*>$/;
 const REGEX_END_STYLE_TAG = /^<\/.*style>$/;
 const REGEX_END_SCRIPT_TAG = /^<\/.*script>$/;
 const REGEX_HEAD_TAG = /<head[^>]*>/i;
-const REGEX_PATH_STRING = /"(\.?\.?(\/[\w.\- ]+)*\/?|\.{1,2})"/;
+const REGEX_PATH_STRING = /"([:.]?[\.\/]?[\w.\-\/ ]*)"/;
 const REGEX_CSS_PATH = /^"(\.?\/.*)"$/;
 const REGEX_JS_PATH = /^"(\.?\/.*)"$/;
 const REGEX_FN_PARAMS = /^[a-zA-Z0-9.]+$/;
@@ -170,7 +171,11 @@ export default class Parser {
    * of `@(...)` with corresponding parameter values obtained from `this.parameters`. If
    * `isInRavenFormate` is false, it directly retrieves the parameter value for the entire `
    */
-  parameterExecuter(html: string, isInRavenFormate: boolean = true, parameters: Record<string, any> | undefined = undefined) {
+  parameterExecuter(
+    html: string,
+    isInRavenFormate: boolean = true,
+    parameters: Record<string, any> | undefined = undefined,
+  ) {
     const params = parameters || this.parameters;
 
     if (isInRavenFormate) {
@@ -240,7 +245,11 @@ export default class Parser {
     );
     const parsed: string = parser.htmlParser('');
     for (let i = 0; i < arr.length; i++) {
-      html += parser.parameterExecuter(parsed, true, { ...this.parameters, [key]: arr[i], _i: i });
+      html += parser.parameterExecuter(parsed, true, {
+        ...this.parameters,
+        [key]: arr[i],
+        _i: i,
+      });
     }
 
     return html;
@@ -343,7 +352,22 @@ export default class Parser {
       if (Number(trimmed)) fnArgs.push(trimmed);
       else if (REGEX_FN_PARAMS.test(trimmed))
         fnArgs.push(this.getValue(this.parameters, trimmed) || '');
-      else if (
+      else if (REGEX_FN_CALLS_IN_FN_ARGS.test(trimmed)) {
+        const functionProperties = this.extractFunctionCallValues(
+          `@${trimmed}`,
+        );
+        const fn = this.functions.lookup(
+          functionProperties === null || functionProperties === void 0
+            ? void 0
+            : functionProperties.fnName,
+        );
+        const fnReturnValue = fn(
+          ...((functionProperties === null || functionProperties === void 0
+            ? void 0
+            : functionProperties.fnArgs) || []),
+        );
+        fnArgs.push(fnReturnValue);
+      } else if (
         (trimmed.startsWith(`"`) || trimmed.startsWith(`'`)) &&
         (trimmed.endsWith(`"`) || trimmed.endsWith(`'`))
       )
@@ -580,9 +604,15 @@ export default class Parser {
                 this.currentToken?.type == TOKEN_TYPES.STRING &&
                 REGEX_PATH_STRING.test(this.currentToken?.value)
               ) {
+                const componentString = this.currentToken?.value
+                  .replace(`"`, '')
+                  .replace(`"`, '');
+                const componentDir = componentString.startsWith(':')
+                  ? findNodeModules() || ''
+                  : this.__view;
                 const componentPath = path.resolve(
-                  this.__view,
-                  this.currentToken?.value.replace(`"`, '').replace(`"`, ''),
+                  componentDir,
+                  componentString.replace(':', ''),
                 );
                 const content: string = fs.readFileSync(
                   componentPath.endsWith('.zare')
@@ -593,17 +623,14 @@ export default class Parser {
 
                 const tokenizer: Lexer = new Lexer(
                   content,
-                  path.resolve(
-                    this.__view,
-                    this.currentToken?.value.replace(`"`, '').replace(`"`, ''),
-                  ),
+                  path.resolve(path.dirname(componentPath), componentPath),
                 );
                 const componentTokens: Token[] = tokenizer.start();
 
                 const componentParser: Parser = new Parser(
                   componentTokens,
                   undefined,
-                  this.__view,
+                  path.dirname(componentPath),
                   undefined,
                   this.linker,
                   this.script,
@@ -963,7 +990,7 @@ export default class Parser {
         while (
           this.currentToken &&
           this.currentToken.value.match(REGEX_CLOSING_TAG)?.[1].trim() !==
-          componentName
+            componentName
         ) {
           slotTokens.push(this.currentToken);
           this.eat();
