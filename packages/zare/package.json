@@ -1,6 +1,6 @@
 {
   "name": "zare",
-  "version": "2.5.2",
+  "version": "2.6.0",
   "description": "A file base component template engine",
   "main": "dist/index.js",
   "type": "module",
