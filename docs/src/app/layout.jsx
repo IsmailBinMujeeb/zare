@@ -3,6 +3,7 @@ import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
+import FooterComponent from './components/footer'
 
 export const metadata = {
   metadataBase: new URL('https://ismailbinmujeeb.github.io/zare/'),
@@ -43,7 +44,10 @@ export default async function RootLayout({ children }) {
       <body>
         <Layout
           navbar={navbar}
-          footer={<Footer style={{ display: "flex", justifyContent: "center" }}>MIT {new Date().getFullYear()} © Zare.</Footer>}
+          footer={<Footer style={{
+            "padding": "60px 0 30px",
+            "borderTop": "1px solid rgba(255, 255, 255, 0.1)",
+          }}><FooterComponent /></Footer>}
           editLink="Edit this page on GitHub"
           docsRepositoryBase="https://github.com/ismailbinmujeeb/zare/blob/main/docs"
           sidebar={{ autoCollapse: true }}

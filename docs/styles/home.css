@@ -1,0 +1,280 @@
+/* Base styles that work for both themes */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section - Light Mode (Default) */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-content {
+    text-align: center;
+    z-index: 2;
+}
+
+.hero h1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: linear-gradient(146deg, #000, #8a858d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -2px;
+}
+
+.hero-subtitle {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    margin-bottom: 30px;
+    color: #666666;
+    font-weight: 300;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    color: #888888;
+    line-height: 1.8;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #1a1a1a, #666666);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #1a1a1a;
+    border: 2px solid #1a1a1a;
+}
+
+.btn-secondary:hover {
+    background: #1a1a1a;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Features Section - Light Mode */
+.features {
+    padding: 120px 0;
+    position: relative;
+}
+
+.features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+}
+
+.section-title {
+    text-align: center;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 800;
+    margin-bottom: 60px;
+    background: linear-gradient(135deg, #1a1a1a, #666666);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-top: 60px;
+}
+
+.feature-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 25px;
+    background: linear-gradient(135deg, #1a1a1a, #666666);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.feature-icon span {
+    filter: grayscale(1) brightness(0) invert(1);
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #1a1a1a;
+}
+
+.feature-card p {
+    color: #666666;
+    line-height: 1.6;
+}
+
+/* DARK MODE STYLES */
+/* Nextra uses next-themes which adds "dark" class to html element */
+.dark .hero::before {
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+}
+
+.dark .hero h1 {
+    background: linear-gradient(146deg, #fff, #757a7d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dark .hero-subtitle {
+    color: #cccccc;
+}
+
+.dark .hero-description {
+    color: #aaaaaa;
+}
+
+.dark .btn-primary {
+    background: linear-gradient(135deg, #ffffff, #cccccc);
+    color: #000000;
+}
+
+.dark .btn-primary:hover {
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+}
+
+.dark .btn-secondary {
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+.dark .btn-secondary:hover {
+    background: #ffffff;
+    color: #000000;
+}
+
+.dark .features::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.dark .section-title {
+    background: linear-gradient(135deg, #ffffff, #cccccc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dark .feature-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .feature-card:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.dark .feature-icon {
+    background: linear-gradient(135deg, #ffffff, #cccccc);
+    color: #000000;
+}
+
+.dark .feature-icon span {
+    filter: grayscale(1) brightness(0);
+}
+
+.dark .feature-card h3 {
+    color: #ffffff;
+}
+
+.dark .feature-card p {
+    color: #cccccc;
+}
+
+/* Alternative approach using CSS custom properties */
+/* You can also define this in your theme.config.tsx or use CSS variables */
+
+/* CSS Variables approach (Alternative) */
+:root {
+    --hero-text-primary: #1a1a1a;
+    --hero-text-secondary: #666666;
+    --hero-text-muted: #888888;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --card-border: rgba(0, 0, 0, 0.1);
+    --gradient-bg: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.05) 0%, transparent 70%);
+}
+
+.dark {
+    --hero-text-primary: #ffffff;
+    --hero-text-secondary: #cccccc;
+    --hero-text-muted: #aaaaaa;
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --gradient-bg: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+}
