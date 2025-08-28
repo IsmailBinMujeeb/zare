@@ -1,5 +1,11 @@
 # @zare/cli
 
+## 1.0.3
+
+### Patch Changes
+
+- 2237838: replaces myapp with . in serve and build command of cli base template
+
 ## 1.0.2
 
 ### Patch Changes
