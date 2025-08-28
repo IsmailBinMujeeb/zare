@@ -65,6 +65,20 @@ export function buildCommand(program: Command) {
         await fs.writeFile(outputHtmlFilePath, outputHtmlContent);
       }
 
+      // Copying all included files and folders
+      const includesFilesAndFolders = zareConfigurations.includes;
+
+      includesFilesAndFolders.forEach(async (f) => {
+        const fPath = path.resolve(process.cwd(), projectPath, f);
+        const fDestination = path.resolve(outDir, f);
+
+        if (!(await fs.exists(fPath))) {
+          return logger.warn(`${fPath} does not exist`);
+        }
+
+        await fs.copy(fPath, fDestination);
+      })
+
       logger.done('build complete');
     } catch (error) {
       if (error instanceof Error)

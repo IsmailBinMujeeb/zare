@@ -5,6 +5,7 @@ interface IZareConfig {
   static: string;
   outdir: string;
   pages: string;
+  includes: string[];
   tailwind: boolean;
 }
 
@@ -32,6 +33,7 @@ export async function loadZareConfig(searchFrom: string): Promise<IZareConfig> {
     static: configs.static || './static',
     outdir: configs.outdir || './dist',
     pages: configs.pages || './pages',
+    includes: configs.includes || [],
     tailwind: configs.tailwind || false,
   };
 }
