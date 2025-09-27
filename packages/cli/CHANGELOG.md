@@ -1,5 +1,11 @@
 # @zare/cli
 
+## 1.1.1
+
+### Patch Changes
+
+- 097b6b5: fix base templates static files import paths to work after build
+
 ## 1.1.0
 
 ### Minor Changes
