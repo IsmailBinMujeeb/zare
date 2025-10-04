@@ -10,6 +10,8 @@ import path from 'path';
 import Syntax_Error from '../errors/syntaxError.js';
 import Template_Error from '../errors/templateError.js';
 import { findNodeModules } from '../utils/helper.js';
+import { createRequire } from 'module';
+import type { ZareConfig } from '../config.js';
 
 const REGEX_ARRAY_INDEX = /\[(\w+)\]/g;
 const REGEX_DOUBLE_QUOTE_KEY = /\["(.*?)"\]/g;
@@ -20,15 +22,15 @@ const REGEX_FN_CALL_EXTRACT = /@([a-zA-Z0-9_]+)\(([\s\S]*)\)/;
 const REGEX_COMPONENT_ATTR = /([a-zA-Z0-9_-]+)="([^"]*)"/g;
 const REGEX_OPENING_TAG = /^<([a-zA-Z0-9_-]+)([^>]*)\/?>/;
 const REGEX_CLOSING_TAG = /^<\/([a-zA-Z0-9_-]+)>/;
-const REGEX_SELF_CLOSING_TAG = /^<([^\s>\/]+)/;
+const REGEX_SELF_CLOSING_TAG = /^<([^\s>/]+)/;
 const REGEX_STYLE_TAG = /^<style.*>$/;
 const REGEX_SCRIPT_TAG = /^<script.*>$/;
 const REGEX_END_STYLE_TAG = /^<\/.*style>$/;
 const REGEX_END_SCRIPT_TAG = /^<\/.*script>$/;
 const REGEX_HEAD_TAG = /<head[^>]*>/i;
-const REGEX_PATH_STRING = /"([:.]?[\.\/]?[\w.\-\/ ]*)"/;
-const REGEX_CSS_PATH = /^"(\.?\/.*)"$/;
-const REGEX_JS_PATH = /^"(\.?\/.*)"$/;
+const REGEX_PATH_STRING = /"([:.]?[./]?[\w.\-/ ]*)"/;
+const REGEX_CSS_PATH = /^"(([a-zA-Z][a-zA-Z0-9+.-]*):\/\/|#|\.\.|\/).*"$/;
+const REGEX_JS_PATH = /^"(([a-zA-Z][a-zA-Z0-9+.-]*):\/\/|#|\.\.|\/).*"$/;
 const REGEX_FN_PARAMS = /^[a-zA-Z0-9.]+$/;
 const REGEX_FN_CALLS_IN_FN_ARGS = /\b([a-zA-Z_]\w*)\s*\(\s*([^()]*?)\s*\)/;
 const REGEX_EACH_EXPRESSION = /\((.*?)\)/;
@@ -42,6 +44,8 @@ export default class Parser {
   linker: Scope;
   script: Scope;
   functions: Scope;
+  filePath: string = '';
+  config!: ZareConfig;
 
   constructor(
     private tokens: Token[],
@@ -243,6 +247,7 @@ export default class Parser {
       undefined,
       this.functions,
     );
+    parser.config = this.config;
     const parsed: string = parser.htmlParser('');
     for (let i = 0; i < arr.length; i++) {
       html += parser.parameterExecuter(parsed, true, {
@@ -475,8 +480,7 @@ export default class Parser {
 
       const titleTagIndex = html.indexOf('</title>');
 
-      const resolvedValue = value.endsWith('.js') ? value : `${value}.js`;
-      const jsScriptTag = `\n<script src="${resolvedValue}" defer/></script>`;
+      const jsScriptTag = `\n<script src="${value}" defer/></script>`;
 
       if (titleTagIndex !== -1) {
         const insertPosition = titleTagIndex + '</title>'.length;
@@ -509,8 +513,7 @@ export default class Parser {
 
       const titleTagIndex = html.indexOf('</title>');
 
-      const resolvedValue = value.endsWith('.css') ? value : `${value}.css`;
-      const cssLinkTag = `\n<link rel="stylesheet" href="${resolvedValue}" />`;
+      const cssLinkTag = `\n<link rel="stylesheet" href="${value}" />`;
 
       if (titleTagIndex !== -1) {
         const insertPosition = titleTagIndex + '</title>'.length;
@@ -610,16 +613,14 @@ export default class Parser {
                 const componentDir = componentString.startsWith(':')
                   ? findNodeModules() || ''
                   : this.__view;
-                const componentPath = path.resolve(
+                let componentPath = path.resolve(
                   componentDir,
                   componentString.replace(':', ''),
                 );
-                const content: string = fs.readFileSync(
-                  componentPath.endsWith('.zare')
-                    ? componentPath
-                    : `${componentPath}.zare`,
-                  'utf-8',
-                );
+                componentPath = componentPath.endsWith('.zare')
+                  ? componentPath
+                  : `${componentPath}.zare`;
+                const content: string = fs.readFileSync(componentPath, 'utf-8');
 
                 const tokenizer: Lexer = new Lexer(
                   content,
@@ -635,7 +636,8 @@ export default class Parser {
                   this.linker,
                   this.script,
                 );
-
+                componentParser.config = this.config;
+                componentParser.filePath = componentPath;
                 this.scope.define(componentName, componentParser);
                 this.eat();
               } else
@@ -680,9 +682,11 @@ export default class Parser {
               .replace(`"`, '')
               .replace(`"`, '');
 
-            this.linker.parent
-              ? this.linker.parent.define(cssPath, cssPath)
-              : this.linker.define(cssPath, cssPath);
+            (this.linker.parent ? this.linker.parent : this.linker).define(
+              cssPath,
+              this.config.resolveStatic(this.filePath, cssPath),
+            );
+
             this.eat();
           } else
             throw Syntax_Error.toString('Syntax Error', {
@@ -708,9 +712,10 @@ export default class Parser {
               .replace(`"`, '')
               .replace(`"`, '');
 
-            this.script.parent
-              ? this.script.parent.define(jsPath, jsPath)
-              : this.script.define(jsPath, jsPath);
+            (this.script.parent ? this.script.parent : this.script).define(
+              jsPath,
+              this.config.resolveStatic(this.filePath, jsPath),
+            );
             this.eat();
           } else
             throw Syntax_Error.toString('Syntax Error', {
@@ -1018,6 +1023,7 @@ export default class Parser {
           undefined,
           this.functions,
         );
+        slotParser.config = this.config;
         const slotWithParameters = slotParser.htmlParser('');
 
         componentParameters.slot = slotWithParameters;
@@ -1218,6 +1224,7 @@ export default class Parser {
       this.__view,
       this.scope,
     );
+    parser.config = this.config;
     return parser.htmlParser(html);
   }
 }

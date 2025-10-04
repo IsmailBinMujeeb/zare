@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import { logger } from '../utils/logger.js';
 import { fileURLToPath } from 'url';
-import { cpDir } from '../utils/cpdir.js';
+import { cpDir } from '../utils/fs.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -21,7 +21,7 @@ export function initCommand(program: Command) {
         const templatePath = path.resolve(__dirname, '../../templates/base');
 
         await cpDir(templatePath, destinationPath);
-        logger.info('template copied');
+        logger.info`template copied`;
 
         // update package name generated previously
         if (promptAnswers.packageName) {
@@ -36,14 +36,14 @@ export function initCommand(program: Command) {
               },
               { spaces: 2 },
             );
-            logger.action('updated package.json');
+            logger.action`updated package.json`;
           }
         }
 
-        logger.done('project initialized');
+        logger.done`project initialized`;
       } catch (error) {
         if (error instanceof Error)
-          logger.error(`Failed to initialize project: ${error.message}`);
+          logger.error`failed to initialize project: ${error.message}`;
         process.exit(1);
       }
     });

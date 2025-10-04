@@ -11,6 +11,7 @@ The CSS files are static files that might not be in the same folder as your temp
 ```zare filename="index.zare"
 link "/path/to/navbar.css"
 ```
+
 - The first keyword is `link` which is predefined in Zare for linking your css file.
 
 - And path, the path is by default start from your static folder
@@ -33,7 +34,6 @@ If your not using `head` tag in your file or in your Base Template you can’t l
 
 Here is a minimal example of how you can link css with Base templates
 
-
 ```zare filename="/views/pages/index.zare"
 as Base import "../base"
 link "/css/index" # will be ./public/css/index.css
@@ -46,7 +46,6 @@ serve (
 ```
 
 And as mention above your template must have a head tag.
-
 
 ```zare filename="/views/base.zare"
 
@@ -66,21 +65,19 @@ serve (
 
 So that the final HTML output will be something
 
-
 ```html
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Button</title>
-        <link rel="stylesheet" href="/style/index.css">
-    </head>
-    <body>
-        <button>Get Started</button>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Button</title>
+    <link rel="stylesheet" href="/style/index.css" />
+  </head>
+  <body>
+    <button>Get Started</button>
+  </body>
 </html>
-
 ```
 
 In `v1` Doctype will not support.

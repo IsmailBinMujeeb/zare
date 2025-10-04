@@ -24,7 +24,7 @@ views/
 │   ├── card.zare
 │   ├── navbar.zare
 │   └── footer.zare
-└── base.zare        # Base template 
+└── base.zare        # Base template
 ```
 
 ## Declare A Component
@@ -96,14 +96,14 @@ To use components in your Zare code is vary easy and similar to `JSX` code, Zare
            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
        </Article>
    )
-   ```
+```
 
-   ```zare filename="/views/components/article.zare"
+```zare filename="/views/components/article.zare"
 
-   serve (
-       <h3>@(title)</h3>
-       <p>@(slot)</p>
-   )
+serve (
+    <h3>@(title)</h3>
+    <p>@(slot)</p>
+)
 ```
 
 Here the `@(title)` will replace with `Lorem Ipsum` and `@(slot)` will replace the content written between open and closing component tags.

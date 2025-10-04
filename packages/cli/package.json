@@ -2,38 +2,33 @@
   "name": "@zarejs/cli",
   "version": "1.1.0",
   "type": "module",
-  "bin": {
-    "zare": "./dist/index.js"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "dev": "node dist/index.js",
     "build": "tsc"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "chokidar": "^4.0.3",
+    "commander": "^14.0.1",
+    "express": "^5.1.0",
+    "fs-extra": "^11.3.2",
+    "inquirer": "^12.9.6",
+    "ora": "^9.0.0",
+    "zare": "^2.6.1"
+  },
+  "bin": {
+    "zare": "./dist/index.js"
   },
   "files": [
     "dist",
     "templates",
     "CHANGELOG.md"
   ],
-  "dependencies": {
-    "chalk": "^5.4.1",
-    "chokidar": "^4.0.3",
-    "commander": "^14.0.0",
-    "cosmiconfig": "^9.0.0",
-    "express": "^5.1.0",
-    "fs-extra": "^7.0.1",
-    "inquirer": "^12.9.0",
-    "ora": "^8.2.0",
-    "zare": "^2.6.1"
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IsmailBinMujeeb/zare.git"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/fs-extra": "^11.0.4"
   }
 }

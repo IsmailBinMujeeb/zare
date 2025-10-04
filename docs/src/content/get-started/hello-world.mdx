@@ -24,16 +24,16 @@ npm install express zare
 
 Now, create the following files in your project:
 
-* **app.js** (Main server file)
+- **app.js** (Main server file)
 
-* **views/index.zare** (ZARE template file)
+- **views/index.zare** (ZARE template file)
 
 #### **app.js**
 
 This file will set up your **Express** **server** and configure it to use **Zare** as the template engine.
 
-````javascript filename="app.js"
-import express from "express";
+```javascript filename="app.js"
+import express from 'express';
 const app = express();
 
 // Set the view engine to Zare
@@ -49,13 +49,13 @@ app.get('/', (req, res) => {
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
 });
-````
+```
 
 #### **views/index.zare**
 
 This is your Zare template where you'll display the dynamic content. The `@( )` syntax is used to inject variables into the HTML.
 
-````zare filename="views/index.zare"
+```zare filename="views/index.zare"
 serve (
     <html lang="en">
     <head>
@@ -68,7 +68,7 @@ serve (
     </body>
     </html>
 )
-````
+```
 
 ### 4. **Run the Application**
 

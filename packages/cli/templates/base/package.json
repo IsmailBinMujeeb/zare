@@ -1,14 +1,13 @@
 {
-  "name": "my-project",
+  "name": "template-base",
   "version": "0.0.0",
-  "description": "A brief description of the project.",
+  "type": "module",
+  "imports": {
+    "#css/*": "./static/css/*",
+    "#js/*": "./static/js/*"
+  },
   "scripts": {
     "serve": "zare serve",
     "build": "zare build"
-  },
-  "keywords": [],
-  "author": "Your Name",
-  "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {}
+  }
 }

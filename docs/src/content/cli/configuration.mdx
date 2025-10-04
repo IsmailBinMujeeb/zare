@@ -1,20 +1,21 @@
 # Configuration Reference
+
 > You can edit `zare.config.js` file to change the server configurations
 
 ### `port` - number
 
 By default the server will listen on `8185`, But this can be change by modifying `port` in the configurations.
 
-### `outdir` - folder path
+### `outDir` - folder path
 
 This directory will contains the static **HTML** files. By default, it's `./dist`
 [Reference](quick-start.mdx#build-html)
 
-### `static` - folder path(s)
+### `staticDir` - folder path(s)
 
 Static file directory, or an array containing multiple static directories. By default, it's `./static`.
 
-### `Pages` - folder path
+### `pagesDir` - folder path
 
 This directory will contains **views** files. By default, it's `./pages`.
 
@@ -25,11 +26,9 @@ The `generateStaticParams` function generates static parameter values for dynami
 #### Type Declaration
 
 ```ts
-type StaticParams = Record<string, (string | number)[]>;
-
 interface IZareConfig {
   generateStaticParams?: (
     path?: string,
-  ) => StaticParams | Promise<StaticParams>;
+  ) => Record<string, any> | Promise<Record<string, any>>;
 }
 ```

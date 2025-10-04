@@ -1,45 +1,72 @@
 import chalk from 'chalk';
 
-export class logger {
-  static info(msg: string) {
-    console.log(
-      `${chalk.whiteBright('Zare ::')} ${chalk.cyan.bold('Info')} ${chalk.gray(msg)}`,
-    );
+interface LogLevelConfig {
+  title: string;
+  color: (...args: any[]) => string;
+  level: number;
+}
+
+const logLevels: Record<string, LogLevelConfig> = {
+  debug: { title: 'Debug', color: chalk.gray.bold, level: 0 },
+  info: { title: 'Info', color: chalk.cyan.bold, level: 1 },
+  warn: { title: 'Warn', color: chalk.yellow.bold, level: 2 },
+  done: { title: 'Done', color: chalk.green.bold, level: 3 },
+  error: { title: 'Error', color: chalk.red.bold, level: 4 },
+  prompt: { title: 'Prompt', color: chalk.magenta.bold, level: 5 },
+  action: { title: 'Action', color: chalk.blue.bold, level: 6 },
+};
+
+export class Logger {
+  private level: number;
+
+  constructor(level: number) {
+    this.level = level;
   }
 
-  static warn(msg: string) {
-    console.log(
-      `${chalk.whiteBright('Zare ::')} ${chalk.yellow.bold('Warn')} ${chalk.gray(msg)}`,
-    );
+  private _log(
+    level: keyof typeof logLevels,
+    strings: TemplateStringsArray,
+    values: any[],
+  ) {
+    const config = logLevels[level];
+
+    if (config.level < this.level) return;
+
+    const message = strings.reduce((acc, cur, i) => {
+      return acc + cur + (values[i] ?? '');
+    }, '');
+
+    const prefix = `${chalk.whiteBright('Zare::')}${config.color(config.title)} `;
+    console.log(prefix + message);
   }
 
-  static debug(msg: string) {
-    console.log(
-      `${chalk.whiteBright('Zare ::')} ${chalk.gray.bold('Debug')} ${chalk.gray(msg)}`,
-    );
+  debug(strings: TemplateStringsArray, ...values: any[]) {
+    this._log('debug', strings, values);
   }
 
-  static done(msg: string) {
-    console.log(
-      `${chalk.whiteBright('Zare ::')} ${chalk.green.bold('Done')} ${chalk.gray(msg)}`,
-    );
+  info(strings: TemplateStringsArray, ...values: any[]) {
+    this._log('info', strings, values);
   }
 
-  static error(msg: string) {
-    console.log(
-      `${chalk.whiteBright('Zare ::')} ${chalk.red.bold('Error')} ${chalk.gray(msg)}`,
-    );
+  warn(strings: TemplateStringsArray, ...values: any[]) {
+    this._log('warn', strings, values);
   }
 
-  static prompt(msg: string) {
-    console.log(
-      `${chalk.whiteBright('Zare ::')} ${chalk.magenta.bold('Prompt')} ${chalk.gray(msg)}`,
-    );
+  done(strings: TemplateStringsArray, ...values: any[]) {
+    this._log('done', strings, values);
   }
 
-  static action(msg: string) {
-    console.log(
-      `${chalk.whiteBright('Zare ::')} ${chalk.blue.bold('Action')} ${chalk.gray(msg)}`,
-    );
+  error(strings: TemplateStringsArray, ...values: any[]) {
+    this._log('error', strings, values);
+  }
+
+  prompt(strings: TemplateStringsArray, ...values: any[]) {
+    this._log('prompt', strings, values);
+  }
+
+  action(strings: TemplateStringsArray, ...values: any[]) {
+    this._log('action', strings, values);
   }
 }
+
+export const logger = new Logger(1);

@@ -1,0 +1,11 @@
+import "#js/active-link.js"
+
+serve (
+    <header>
+        <h2>⚡Zare</h2>
+        <nav>
+            <li><active-link class="link" href="/">Home</active-link></li>
+            <li><active-link class="link" href="/about">About</active-link></li>
+        </nav>
+    </header>
+)

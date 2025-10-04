@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import Lexer from '../lib/core/lexer';
 import Parser from '../lib/core/parser';
 import { describe, it, expect, beforeEach } from 'vitest';
+import { ZareConfig } from '../lib/config';
 
 const root = resolve(import.meta.dirname, '..');
 
@@ -12,9 +13,12 @@ const render = (testCode: string, dummyParams = {}): string => {
   return parser.parameterExecuter(parsed);
 };
 
+const config = new ZareConfig();
+
 const setParser = (testCode: string, dummyParams: Record<string, any> = {}) => {
   const tokens = new Lexer(testCode, '').start();
   const parser = new Parser(tokens, dummyParams, root);
+  parser.config = config;
   parser.parse();
   return parser;
 };
@@ -130,7 +134,7 @@ describe('Parser', () => {
             </body>
             </html>`;
 
-      const testCode = `link "/dummy.css"
+      const testCode = `link "virtual://dummy"
             serve (
             ${testHtml}
             )`;
@@ -138,11 +142,11 @@ describe('Parser', () => {
       const parser = setParser(testCode);
       const html = parser.linkStatic(testHtml);
 
-      expect(html).includes(`<link rel="stylesheet" href="/dummy.css" />`);
+      expect(html).includes(`<link rel="stylesheet" href="virtual://dummy" />`);
     });
 
     it('should throw head tag not found error for linking css', () => {
-      const testCode = `link "/dummy"`;
+      const testCode = `link "virtual://dummy"`;
 
       try {
         const parser = setParser(testCode);
@@ -168,7 +172,7 @@ describe('Parser', () => {
             </body>
             </html>`;
 
-      const testCode = `link "/dummy"
+      const testCode = `link "virtual://dummy"
             serve (
             ${testHtml}
             )`;
@@ -176,7 +180,7 @@ describe('Parser', () => {
       const parser = setParser(testCode);
       const html = parser.linkStatic(testHtml);
 
-      expect(html).includes(`<link rel="stylesheet" href="/dummy.css" />`);
+      expect(html).includes(`<link rel="stylesheet" href="virtual://dummy" />`);
     });
 
     it('should import the js', () => {
@@ -193,18 +197,20 @@ describe('Parser', () => {
             </body>
             </html>`;
 
-      const testCode = `import "/dummy.js"
+      const testCode = `import "virtual://dummy.js"
             serve (
             ${testHtml}
             )`;
 
       const parser = setParser(testCode);
       const html = parser.linkStatic(testHtml);
-      expect(html).includes(`<script src="/dummy.js" defer/></script>`);
+      expect(html).includes(
+        `<script src="virtual://dummy.js" defer/></script>`,
+      );
     });
 
     it('should throw head tag not found error for importing js', () => {
-      const testCode = `import "/dummy"`;
+      const testCode = `import "virtual://dummy"`;
 
       try {
         const parser = setParser(testCode);
@@ -230,7 +236,7 @@ describe('Parser', () => {
             </body>
             </html>`;
 
-      const testCode = `import "/dummy"
+      const testCode = `import "virtual://dummy"
             serve (
             ${testHtml}
             )`;
@@ -238,7 +244,7 @@ describe('Parser', () => {
       const parser = setParser(testCode);
       const html = parser.linkStatic(testHtml);
 
-      expect(html).includes(`<script src="/dummy.js" defer/></script>`);
+      expect(html).includes(`<script src="virtual://dummy" defer/></script>`);
     });
   });
 

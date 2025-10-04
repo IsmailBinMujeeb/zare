@@ -13,7 +13,6 @@ export default defineConfig({
         '**/*.config.*',
         '**/*.test.*',
         '**/node_modules/**',
-        './packages/zare/lib/index.ts',
         './packages/cli/**',
       ],
       reporter: ['text', 'html', 'lcov'],

@@ -1,4 +1,6 @@
-link "./css/style"
+link "#css/global.css"
+as Header import "./components/header"
+as Footer import "./components/footer"
 
 serve (
     <!DOCTYPE html>
@@ -9,7 +11,11 @@ serve (
         <title>Base Template</title>
     </head>
     <body>
-        @(slot)
+        <Header/>
+        <main>
+            @(slot)
+        </main>
+        <Footer/>
     </body>
     </html>
 )

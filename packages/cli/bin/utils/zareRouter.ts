@@ -2,7 +2,7 @@ import { type Express, type Response, type Request, Router } from 'express';
 
 export class ZareRouter {
   private router: Router = Router();
-  private has404: Boolean = false;
+  private has404: boolean = false;
   private pageNotFoundRoute: string = '';
 
   constructor(private routes: string[]) {}

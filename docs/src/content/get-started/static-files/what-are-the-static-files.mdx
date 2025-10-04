@@ -1,6 +1,7 @@
 ---
 title: What Are The Static Files
 ---
+
 ## Overview
 
 **Static files** are files that do not change dynamically when a web server runs.\
@@ -8,29 +9,29 @@ They are delivered to the client exactly as they are stored, without any server-
 
 Common types of static files include:
 
-* HTML files
+- HTML files
 
-* CSS files
+- CSS files
 
-* JavaScript files
+- JavaScript files
 
-* Images (JPG, PNG, SVG, etc.)
+- Images (JPG, PNG, SVG, etc.)
 
-* Fonts (TTF, WOFF, etc.)
+- Fonts (TTF, WOFF, etc.)
 
-* Videos and other media files
+- Videos and other media files
 
 ## Purpose
 
 Static files are essential for:
 
-* Structuring the webpage (HTML)
+- Structuring the webpage (HTML)
 
-* Styling the webpage (CSS)
+- Styling the webpage (CSS)
 
-* Adding client-side interactivity (JavaScript)
+- Adding client-side interactivity (JavaScript)
 
-* Displaying media (images, videos, fonts)
+- Displaying media (images, videos, fonts)
 
 They improve performance by reducing server processing and are often cached by browsers for faster loading.
 
@@ -56,11 +57,11 @@ Example (generic):
 
 ### Important Points
 
-* Static files are served *as-is*, with no changes at runtime.
+- Static files are served _as-is_, with no changes at runtime.
 
-* Efficient caching strategies can be applied to static files.
+- Efficient caching strategies can be applied to static files.
 
-* They are usually placed in a separate directory like `static/`, `public/`, or `assets/`.
+- They are usually placed in a separate directory like `static/`, `public/`, or `assets/`.
 
 ## Example (Node.js with Express)
 
@@ -80,13 +81,13 @@ In this case, files inside the `public/` folder can be accessed directly from th
 
 ## Best Practices
 
-* **Organize** static files into subfolders (e.g., CSS, JS, images).
+- **Organize** static files into subfolders (e.g., CSS, JS, images).
 
-* **Compress** files (e.g., minify CSS and JS) for faster load times.
+- **Compress** files (e.g., minify CSS and JS) for faster load times.
 
-* **Use caching** headers to allow browsers to store static files.
+- **Use caching** headers to allow browsers to store static files.
 
-* **Secure** the static file serving to prevent access to sensitive files.
+- **Secure** the static file serving to prevent access to sensitive files.
 
 ## Conclusion
 

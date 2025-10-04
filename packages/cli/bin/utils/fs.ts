@@ -19,3 +19,18 @@ export async function cpDir(src: string, dest: string) {
 
   await Promise.all(promises);
 }
+
+export async function getAllFiles(dir: string): Promise<string[]> {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const filePath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      const subDirFiles = await getAllFiles(filePath);
+      files.push(...subDirFiles);
+    } else {
+      files.push(filePath);
+    }
+  }
+  return files;
+}

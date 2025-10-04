@@ -14,29 +14,29 @@
 
 ## Express Setup
 
-````javascript copy=true filename="index.js"
-import express from "express"; // Make sure you have express downloaded from npm or yarn
+```javascript copy=true filename="index.js"
+import express from 'express'; // Make sure you have express downloaded from npm or yarn
 
 const app = express();
 const PORT = 3000; // Our server will be running at port 3000
 
-app.set("view engine", "zare"); // zare package must be install.
+app.set('view engine', 'zare'); // zare package must be install.
 
-app.get("/", (req, res) => {
-    res.render("index")
+app.get('/', (req, res) => {
+  res.render('index');
 });
 
 app.listen(PORT);
-````
+```
 
 ## Writing your first Zare file
 
 create a file in views folder and name it index.zare.
 
-````zare filename="view/index.zare"
+```zare filename="view/index.zare"
 serve (
     <h1>Hello, Zare</h1>
 )
-````
+```
 
 💌: Since `v2` we have made big changes in the core engine and continuously new releases are coming, for future **Zare developers** we suggest to use as latest version as you can use.

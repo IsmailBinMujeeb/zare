@@ -1,10 +1,7 @@
 as Base import "../base"
 
-link "./css/style"
-
 serve (
     <Base>
         <h1>About Page</h1>
     </Base>
-    
 )

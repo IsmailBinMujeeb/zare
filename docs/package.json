@@ -2,20 +2,21 @@
   "name": "zare-docs",
   "license": "MIT",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "next build",
     "dev": "next --turbopack",
-    "postbuild": "pagefind --site .next/server/app --output-path build/_pagefind",
-    "start": "next dev"
+    "postbuild": "pagefind --site .next/server/app --output-path dist/_pagefind",
+    "start": "next start"
   },
   "dependencies": {
-    "next": "^15.0.2",
-    "nextra": "4.2.17",
-    "nextra-theme-docs": "4.2.17",
-    "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "next": "^15.5.4",
+    "nextra": "4.6.0",
+    "nextra-theme-docs": "4.6.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
   },
   "devDependencies": {
-    "pagefind": "^1.3.0"
+    "pagefind": "^1.4.0"
   }
 }

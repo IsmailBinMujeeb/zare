@@ -8,7 +8,6 @@ export function startWatcher(path: string, server: Server) {
     persistent: true,
     usePolling: false,
     ignoreInitial: true,
-    depth: 2,
     awaitWriteFinish: {
       stabilityThreshold: 200,
       pollInterval: 100,
@@ -25,6 +24,6 @@ export function startWatcher(path: string, server: Server) {
 async function restartServer(server: Server) {
   server.close();
   app.listen(app.get('port'), () => {
-    logger.info('Server reload');
+    logger.info`server reload`;
   });
 }

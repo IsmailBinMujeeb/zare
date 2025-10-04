@@ -21,16 +21,16 @@ serve (
             @(slot)
         </body>
         </html>
-) 
+)
 ```
 
 ### Notes
 
-* You can’t use Doctype tag in `v1` it will throw error we will handle it in `v2`.
+- You can’t use Doctype tag in `v1` it will throw error we will handle it in `v2`.
 
-* You can’t use `style` and `script` tag in any Zare file it is not supported yet but you can use `linking css` and `importing vanilla js` statements which is explained here.
+- You can’t use `style` and `script` tag in any Zare file it is not supported yet but you can use `linking css` and `importing vanilla js` statements which is explained here.
 
-* `@(slot)` parameter is necessary without it your code will not shown.
+- `@(slot)` parameter is necessary without it your code will not shown.
 
 Now the Page code that will use the above template.
 
@@ -46,9 +46,9 @@ serve (
 
 ### Note
 
-* The `@(title)` in `/views/base.zare` will be replaces with `Landing Page`.
+- The `@(title)` in `/views/base.zare` will be replaces with `Landing Page`.
 
-* The `@(slot)` in `/views/pages/index.zare` will be replaces with your page content.
+- The `@(slot)` in `/views/pages/index.zare` will be replaces with your page content.
 
 ## Imagine
 

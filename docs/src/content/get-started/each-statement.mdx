@@ -1,6 +1,7 @@
 ---
 title: '@each Statement'
 ---
+
 ## Overview
 
 `@each` is a **method** (not a loop structure) that is often used to iterate over arrays or collections.\
@@ -10,7 +11,7 @@ It’s like saying:
 
 > "For each item in the collection, do something with it!"
 
-***
+---
 
 ## Syntax (Generic Form)
 
@@ -20,25 +21,25 @@ It’s like saying:
 }
 ```
 
-***
+---
 
 ## How It Works
 
-* The `@each` method **iterates over each element** in an array.
+- The `@each` method **iterates over each element** in an array.
 
-* It executes the **provided function** for each item in the collection, passing the item, index `@(_i)`, and the entire array as parameters.
+- It executes the **provided function** for each item in the collection, passing the item, index `@(_i)`, and the entire array as parameters.
 
-* Using `@(_i)` you can access the current item’s index, `_i` is built in.
+- Using `@(_i)` you can access the current item’s index, `_i` is built in.
 
-***
+---
 
 ## Example (JavaScript)
 
 ```javascript filename="index.js"
 const numbers = [1, 2, 3, 4, 5];
 
-numbers.forEach(function(num) {
-    console.log(num * 2); // Double each number
+numbers.forEach(function (num) {
+  console.log(num * 2); // Double each number
 });
 ```
 
@@ -55,7 +56,13 @@ numbers.forEach(function(num) {
 ## Example (Zare)
 
 ```javascript
-res.render("index", {items: [{name: "Soap", price: 20}, {name: "Rice", price: 50}, {name: "Oil", price: 100}]} );
+res.render('index', {
+  items: [
+    { name: 'Soap', price: 20 },
+    { name: 'Rice', price: 50 },
+    { name: 'Oil', price: 100 },
+  ],
+});
 ```
 
 ```zare filename="index.zare"
@@ -72,16 +79,16 @@ serve (
 
 ```html
 <ul>
-    <li>soap - $20</li>
-    <li>Rice - $50</li>
-    <li>Oil - $100</li>
+  <li>soap - $20</li>
+  <li>Rice - $50</li>
+  <li>Oil - $100</li>
 </ul>
 ```
 
 ## Key Points
 
-* `@each` **cannot break** or **continue** the loop early. If you need that.
+- `@each` **cannot break** or **continue** the loop early. If you need that.
 
-* It’s a **keyword**, and it only works with **arrays** (or array-like objects).
+- It’s a **keyword**, and it only works with **arrays** (or array-like objects).
 
-* The block inside `{…}` is executed for **each** element in the collection.
+- The block inside `{…}` is executed for **each** element in the collection.

@@ -1,11 +1,13 @@
 import Lexer from './lexer.js';
 import Parser from './parser.js';
 import { sanitizeOptions } from '../utils/helper.js';
+import type { ZareConfig } from '../config.js';
 
 export default (
   content: string,
   options: Record<string, any>,
   filePath: string,
+  config: ZareConfig,
 ) => {
   const tokenizer: Lexer = new Lexer(content, filePath);
   const tokens = tokenizer.start();
@@ -16,8 +18,11 @@ export default (
   const parserInstance: Parser = new Parser(
     tokens,
     sanitized,
-    filePath.replace(/[\/\\][^\/\\]+$/, ''),
+    filePath.replace(/[/\\][^/\\]+$/, ''),
   );
+  parserInstance.config = config;
+  parserInstance.filePath = filePath;
+
   const parsed: string = parserInstance.parse();
 
   const html = parserInstance.parameterExecuter(parsed);
