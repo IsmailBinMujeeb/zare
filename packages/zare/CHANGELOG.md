@@ -1,5 +1,20 @@
 # zare
 
+## 3.0.0
+
+### Major Changes
+
+- 3e5d15f: semantic config fields and integrate config into the parser
+
+### Minor Changes
+
+- 0a3e4e5: load zare config in core package
+- ecaccae: the zare config can be specified in the Express settings
+
+### Patch Changes
+
+- c27ee19: fix resources import paths
+
 ## 2.6.1
 
 ### Patch Changes
