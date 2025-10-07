@@ -1,5 +1,22 @@
 # @zare/cli
 
+## 1.2.0
+
+### Minor Changes
+
+- ecaccae: the zare config can be specified in the Express settings
+
+### Patch Changes
+
+- 097b6b5: fix base templates static files import paths to work after build
+- e98c786: assign default values to missing config fields
+- dfe71e3: load multi-level template files for serve command
+- Updated dependencies [c27ee19]
+- Updated dependencies [0a3e4e5]
+- Updated dependencies [ecaccae]
+- Updated dependencies [3e5d15f]
+  - zare@3.0.0
+
 ## 1.1.0
 
 ### Minor Changes
