@@ -1,6 +1,6 @@
 {
   "name": "@zarejs/cli",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "node dist/index.js",
@@ -14,7 +14,7 @@
     "fs-extra": "^11.3.2",
     "inquirer": "^12.10.0",
     "ora": "^9.0.0",
-    "zare": "^2.6.1"
+    "zare": "^3.0.0"
   },
   "bin": {
     "zare": "./dist/index.js"

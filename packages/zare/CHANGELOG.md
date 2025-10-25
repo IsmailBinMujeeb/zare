@@ -1,5 +1,24 @@
 # zare
 
+## 3.0.0
+
+### Major Changes
+
+- 3e5d15f: semantic config fields and integrate config into the parser
+
+### Minor Changes
+
+- 0a3e4e5: load zare config in core package
+- ecaccae: the zare config can be specified in the Express settings
+
+### Patch Changes
+
+- cbd3c9d: enhance syntax error class to provide better error handling
+- f2d662b: refactor templateError class to enhance the error message and api
+- 3f2e30c: slot is null when using self-closing comonents and fixed parameters undefined error
+- c27ee19: fix resources import paths
+- 511513f: fix error while calling a function in each block and passing \_i as an argument
+
 ## 2.6.1
 
 ### Patch Changes
