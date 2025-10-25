@@ -2,7 +2,7 @@
   "name": "zare-vscode-extension",
   "displayName": "Zare vs code extension",
   "description": "VS Code extension for Zare Template Engine",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "engines": {
     "vscode": "^1.102.0"
