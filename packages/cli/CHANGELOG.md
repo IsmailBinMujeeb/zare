@@ -1,5 +1,11 @@
 # @zare/cli
 
+## 1.3.1
+
+### Patch Changes
+
+- ee851cd: add #deps in base template
+
 ## 1.3.0
 
 ### Minor Changes
