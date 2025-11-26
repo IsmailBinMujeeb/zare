@@ -1,5 +1,12 @@
 # zare
 
+## 3.1.1
+
+### Patch Changes
+
+- 65b9c63: fix multiline opening tag
+- a750d15: fix the white space issue in each statement
+
 ## 3.1.0
 
 ### Minor Changes

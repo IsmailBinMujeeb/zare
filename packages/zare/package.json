@@ -1,6 +1,6 @@
 {
   "name": "zare",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "A file base component template engine",
   "type": "module",
   "scripts": {
