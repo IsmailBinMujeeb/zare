@@ -70,7 +70,7 @@
     "bradlc.vscode-tailwindcss"
   ],
   "devDependencies": {
-    "@types/vscode": "^1.106.1",
+    "@types/vscode": "^1.107.0",
     "@vscode/vsce": "^3.7.1"
   }
 }
