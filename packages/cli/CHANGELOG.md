@@ -1,5 +1,16 @@
 # @zare/cli
 
+## 1.3.2
+
+### Patch Changes
+
+- 196578f: fix: add alias in cli confog
+- 7842bfd: update base template
+- 2f13001: fix normalize router output for index.html
+- Updated dependencies [002a06b]
+- Updated dependencies [40b9c07]
+  - zare@3.3.2
+
 ## 1.3.1
 
 ### Patch Changes
