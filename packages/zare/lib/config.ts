@@ -1,27 +1,23 @@
 /* v8 ignore start */
-import path, { dirname, resolve } from 'path';
+import { dirname, resolve } from 'path';
 import type { OrPromise } from './types/token.js';
-import { findUp, isZareConfig, mapOrApply } from './utils/shared.js';
-import { fileURLToPath, pathToFileURL } from 'url';
-import { createRequire } from 'module';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const protocolRegex = /^([a-zA-Z][a-zA-Z0-9+.-]*):\/\//;
-
-function getProtocol(str: string): string | undefined {
-  const match = str.match(protocolRegex);
-  return match?.[1] ?? undefined;
-}
+import { findUp, isZareConfig, toSlash } from './utils/shared.js';
+import { pathToFileURL } from 'url';
+import { ResolverFactory, type NapiResolveOptions } from 'oxc-resolver';
 
 export class ZareConfig {
-  static pathFields: string[] = ['staticDir', 'pagesDir', 'alias'];
-  static defaultValues = {
+  static pathFields: string[] = ['staticDir', 'pagesDir'];
+  static defaultValues: ZareConfig['options'] = {
     staticDir: ['static'],
     pagesDir: 'pages',
-    alias: path.resolve(__dirname),
+    alias: {
+      '@/*': ['./*'],
+    },
     generateStaticParams() {},
+    resolverConfig: {
+      extensions: ['.css', '.js', '.zare'],
+      builtinModules: true,
+    },
   };
 
   options: {
@@ -30,75 +26,87 @@ export class ZareConfig {
     ) => void | OrPromise<Record<string, any>>;
     staticDir: string[];
     pagesDir: string;
-    alias: string;
+    alias: NapiResolveOptions['alias'];
+    resolverConfig: NapiResolveOptions;
   };
   configDir: string = '';
+  private resolver: ResolverFactory;
 
-  constructor(dir?: string, options: Record<PropertyKey, any> = {}) {
+  constructor(
+    dir: string = '',
+    options: Partial<Record<keyof ZareConfig['options'], any>> = {},
+  ) {
+    this.configDir = dir;
     this.options = {
       ...(this.constructor as typeof ZareConfig).defaultValues,
       ...options,
     };
-    this.options.staticDir = Array.isArray(this.options.staticDir)
-      ? this.options.staticDir
-      : [this.options.staticDir];
-    if (dir) {
-      this.configDir = dir;
-    }
     this.normalizePathFields();
-  }
-
-  normalizePathFields() {
-    (this.constructor as typeof ZareConfig).pathFields.forEach(pathField => {
-      // @ts-ignore
-      if (this.options[pathField]) {
-        // @ts-ignore
-        this.options[pathField] = mapOrApply(this.options[pathField], item =>
-          resolve(this.configDir, item),
-        );
-      }
+    this.normalizeAlias();
+    this.resolver = new ResolverFactory({
+      alias: this.options.alias as NapiResolveOptions['alias'],
+      ...this.options.resolverConfig,
     });
   }
 
-  resolve(path: string, request: string) {
-    const proto = getProtocol(request);
-    if (proto) {
-      if (proto === 'file') {
-        request = fileURLToPath(request);
-      } else {
-        return request;
+  private normalizePathFields() {
+    const options: Record<string, any> = this.options;
+    const cons = this.constructor as typeof ZareConfig;
+    cons.pathFields.forEach(pathField => {
+      if (!options[pathField]) {
+        return;
       }
+      // @ts-ignore
+      const isDefaultArray = Array.isArray(cons.defaultValues[pathField]);
+      const value = options[pathField];
+      const into = (s: string) => resolve(this.configDir, s);
+      options[pathField] = isDefaultArray
+        ? Array.isArray(value)
+          ? value.map(into)
+          : [into(value)]
+        : into(value);
+    });
+  }
+
+  private normalizeAlias() {
+    let { alias } = this.options;
+    if (!alias) {
+      return;
     }
-    const require = createRequire(path);
-    return require.resolve(request);
+    if (typeof alias === 'string') {
+      alias = {
+        '@/*': [alias],
+      };
+    }
+    this.options.alias = Object.fromEntries(
+      Object.entries(alias).map(([k, v]) => [
+        k,
+        v.map(s => (s ? resolve(this.configDir, s) : undefined)),
+      ]),
+    );
+  }
+
+  resolve(path: string, request: string): string {
+    const resolved = this.resolver.sync(dirname(path), request);
+    if (resolved.error) {
+      throw new Error(resolved.error);
+    }
+    return resolved.path!;
   }
 
   resolveStatic(path: string, request: string) {
-    if (request.startsWith('/')) {
-      return request;
-    }
-    const initialRequest = request;
-    const proto = getProtocol(request);
-    if (proto) {
-      if (proto === 'file') {
-        request = fileURLToPath(request);
-      } else {
-        return request;
-      }
-    }
-    const require = createRequire(path);
-    request = require.resolve(request);
+    const resolved = this.resolve(path, request);
     const { staticDir } = this.options;
     if (!staticDir.length) {
       throw new Error('can not resolve static files without staticDir options');
     }
 
     for (const s of staticDir) {
-      if (request.startsWith(s)) {
-        return request.slice(s.length).replace(/\\/g, '/');
+      if (resolved.startsWith(s)) {
+        return toSlash(resolved.slice(s.length));
       }
     }
-    throw new Error(`can not resolve static file: ${initialRequest}`);
+    throw new Error(`can not resolve static file: ${request}`);
   }
 
   static async find<T extends ZareConfig>(
@@ -115,4 +123,4 @@ export class ZareConfig {
     return new this();
   }
 }
-/* v8 ignore end */
+/* v8 ignore stop */

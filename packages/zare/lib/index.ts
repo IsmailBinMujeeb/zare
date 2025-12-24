@@ -77,4 +77,4 @@ export const render = async (
   }
 };
 
-/* v8 ignore end */
+/* v8 ignore stop */

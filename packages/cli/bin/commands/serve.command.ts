@@ -8,6 +8,7 @@ import { logger } from '../utils/logger.js';
 import express from 'express';
 import { getAllFiles } from '../utils/fs.js';
 import { ZareCliConfig as ZareConfig } from '../config.js';
+import { toSlash } from 'zare/utils/shared.js';
 
 export function serveCommand(program: Command) {
   program
@@ -70,10 +71,9 @@ async function fileRoutingHandler(pagesDir: string) {
   const routes: string[] = (await getAllFiles(pagesDir))
     .filter(pagePath => pagePath.endsWith('.zare'))
     .map(pagePath => {
-      const baseName = path
-        .relative(pagesDir, pagePath)
-        .slice(0, -'.zare'.length)
-        .replace(/\\/g, '/');
+      const baseName = toSlash(
+        path.relative(pagesDir, pagePath).slice(0, -'.zare'.length),
+      );
       return (
         '/' +
         (baseName.endsWith('/index')

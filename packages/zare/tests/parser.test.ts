@@ -1,24 +1,32 @@
-import { resolve } from 'path';
 import Lexer from '../lib/core/lexer';
 import Parser from '../lib/core/parser';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ZareConfig } from '../lib/config';
 
-const root = resolve(import.meta.dirname, '..');
+const root = import.meta.dirname;
+const testFilePath = import.meta.filename;
+
+const config = new ZareConfig(root, {
+  alias: {
+    '@/*': ['./dummy_static/*'],
+  },
+  staticDir: ['./dummy_static'],
+});
 
 const render = (testCode: string, dummyParams = {}): string => {
   const tokens = new Lexer(testCode, '').start();
   const parser = new Parser(tokens, dummyParams, root);
+  parser.config = config;
+  parser.filePath = testFilePath;
   const parsed = parser.parse();
   return parser.parameterExecuter(parsed);
 };
-
-const config = new ZareConfig();
 
 const setParser = (testCode: string, dummyParams: Record<string, any> = {}) => {
   const tokens = new Lexer(testCode, '').start();
   const parser = new Parser(tokens, dummyParams, root);
   parser.config = config;
+  parser.filePath = testFilePath;
   parser.parse();
   return parser;
 };
@@ -134,7 +142,7 @@ describe('Parser', () => {
             </body>
             </html>`;
 
-      const testCode = `link "virtual://dummy"
+      const testCode = `link "@/dummy"
             serve (
             ${testHtml}
             )`;
@@ -142,11 +150,11 @@ describe('Parser', () => {
       const parser = setParser(testCode);
       const html = parser.linkStatic(testHtml);
 
-      expect(html).includes(`<link rel="stylesheet" href="virtual://dummy" />`);
+      expect(html).includes(`<link rel="stylesheet" href="/dummy" />`);
     });
 
     it('should throw head tag not found error for linking css', () => {
-      const testCode = `link "virtual://dummy"`;
+      const testCode = `link "@/dummy"`;
 
       try {
         const parser = setParser(testCode);
@@ -172,7 +180,7 @@ describe('Parser', () => {
             </body>
             </html>`;
 
-      const testCode = `link "virtual://dummy"
+      const testCode = `link "@/dummy"
             serve (
             ${testHtml}
             )`;
@@ -180,7 +188,7 @@ describe('Parser', () => {
       const parser = setParser(testCode);
       const html = parser.linkStatic(testHtml);
 
-      expect(html).includes(`<link rel="stylesheet" href="virtual://dummy" />`);
+      expect(html).includes(`<link rel="stylesheet" href="/dummy" />`);
     });
 
     it('should import the js', () => {
@@ -197,18 +205,18 @@ describe('Parser', () => {
             </body>
             </html>`;
 
-      const testCode = `import "virtual://dummy.js"
+      const testCode = `import "@/dummy"
             serve (
             ${testHtml}
             )`;
 
       const parser = setParser(testCode);
       const html = parser.linkStatic(testHtml);
-      expect(html).includes(`<script src="virtual://dummy.js" defer></script>`);
+      expect(html).includes(`<script src="/dummy" defer></script>`);
     });
 
     it('should throw head tag not found error for importing js', () => {
-      const testCode = `import "virtual://dummy"`;
+      const testCode = `import "@/dummy"`;
 
       try {
         const parser = setParser(testCode);
@@ -234,7 +242,7 @@ describe('Parser', () => {
             </body>
             </html>`;
 
-      const testCode = `import "virtual://dummy"
+      const testCode = `import "@/dummy"
             serve (
             ${testHtml}
             )`;
@@ -242,7 +250,7 @@ describe('Parser', () => {
       const parser = setParser(testCode);
       const html = parser.linkStatic(testHtml);
 
-      expect(html).includes(`<script src="virtual://dummy" defer></script>`);
+      expect(html).includes(`<script src="/dummy" defer></script>`);
     });
   });
 
@@ -316,7 +324,7 @@ describe('Parser', () => {
 
   describe('components', () => {
     it('should import component', () => {
-      const testCode = `as Dummy import "./tests/dummy_views/dummy"`;
+      const testCode = `as Dummy import "./dummy_views/dummy"`;
       const html = render(testCode);
 
       expect(html).toBeFalsy();
@@ -324,7 +332,7 @@ describe('Parser', () => {
 
     it('should throw unended component error', () => {
       const testCode = `
-            as Dummy import "./tests/dummy_views/dummy"
+            as Dummy import "./dummy_views/dummy"
             serve (<Dummy>)`;
 
       try {
@@ -338,7 +346,7 @@ describe('Parser', () => {
     describe('self closing components', () => {
       it('should display self closing component', () => {
         const testCode = `
-                as Dummy import "./tests/dummy_views/dummy"
+                as Dummy import "./dummy_views/dummy"
                 serve (<Dummy/>)`;
 
         const html = render(testCode);
@@ -347,7 +355,7 @@ describe('Parser', () => {
 
       it('should display attributes in self closing component', () => {
         const testCode = `
-                as Dummy import "./tests/dummy_views/dummy_attr"
+                as Dummy import "./dummy_views/dummy_attr"
                 serve (<Dummy name="fake_name"/>)`;
 
         const html = render(testCode);
@@ -356,7 +364,7 @@ describe('Parser', () => {
 
       it('should display parameters as attributes in self closing component', () => {
         const testCode = `
-                as Dummy import "./tests/dummy_views/dummy_param_attr"
+                as Dummy import "./dummy_views/dummy_param_attr"
                 serve (<Dummy user=@(data)/>)`;
 
         const html = render(testCode, { data: { name: 'fake_name' } });
@@ -365,7 +373,7 @@ describe('Parser', () => {
 
       it('should not display slot when using self closing component', () => {
         const testCode = `
-                as Dummy import "./tests/dummy_views/dummy_slot_self_closing_component"
+                as Dummy import "./dummy_views/dummy_slot_self_closing_component"
                 serve (<Dummy/>)`;
 
         const html = render(testCode);
@@ -376,7 +384,7 @@ describe('Parser', () => {
     describe('opening & closing components', () => {
       it('should display opening and closing component', () => {
         const testCode = `
-                as Dummy import "./tests/dummy_views/dummy.zare"
+                as Dummy import "./dummy_views/dummy.zare"
                 serve (<Dummy></Dummy>)`;
 
         const html = render(testCode);
@@ -385,7 +393,7 @@ describe('Parser', () => {
 
       it('should display attributes in opening & closing component', () => {
         const testCode = `
-                as Dummy import "./tests/dummy_views/dummy_attr.zare"
+                as Dummy import "./dummy_views/dummy_attr.zare"
                 serve (<Dummy name="fake_name"></Dummy>)`;
 
         const html = render(testCode);
@@ -394,7 +402,7 @@ describe('Parser', () => {
 
       it('should display parameter attributes in opening & closing component', () => {
         const testCode = `
-                as Dummy import "./tests/dummy_views/dummy_param_attr.zare"
+                as Dummy import "./dummy_views/dummy_param_attr.zare"
                 serve (<Dummy user=@(data)></Dummy>)`;
 
         const html = render(testCode, { data: { name: 'fake_name' } });
@@ -403,7 +411,7 @@ describe('Parser', () => {
 
       it('should display slot in component', () => {
         const testCode = `
-                as Dummy import "./tests/dummy_views/dummy_slot"
+                as Dummy import "./dummy_views/dummy_slot"
                 serve (<Dummy>fake_slot</Dummy>)`;
 
         const html = render(testCode);

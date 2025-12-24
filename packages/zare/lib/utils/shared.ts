@@ -1,7 +1,10 @@
 /* v8 ignore start */
-import { dirname, join, resolve } from 'path';
+import { dirname, join, resolve, sep } from 'path';
 import { readdir } from 'fs/promises';
 import type { Dirent } from 'fs';
+
+export const toSlash: (s: string) => string =
+  sep === '/' ? s => s : s => s.replace(/\\/g, '/');
 
 export async function findUp(
   root: string,
@@ -33,19 +36,8 @@ export function isZareConfig(_: string, entry: Dirent<string>) {
   return /zare\.config\.(js|ts|mts|cts|mjs|cjs)$/i.test(entry.name);
 }
 
-export function mapOrApply<T, U>(
-  value: T | T[],
-  callback: (item: T) => U,
-): U | U[] {
-  if (Array.isArray(value)) {
-    return value.map(callback);
-  } else {
-    return callback(value);
-  }
-}
-
 export function normalizeRoute(path: string): string {
-  path = path.replace(/\.zare$/i, '').replace(/\\/g, '/');
+  path = toSlash(path.replace(/\.zare$/i, ''));
   if (!path.startsWith('/')) {
     path = '/' + path;
   }
@@ -54,4 +46,4 @@ export function normalizeRoute(path: string): string {
   }
   return path.replace(/\/index$/, '');
 }
-/* v8 ignore end */
+/* v8 ignore stop */
