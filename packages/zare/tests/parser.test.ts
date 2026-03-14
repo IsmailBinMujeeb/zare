@@ -480,6 +480,17 @@ describe('Parser', () => {
       expect(html.trim()).toBe('fake_user');
     });
 
+    it('should not display username in if block', () => {
+      const testCode = `serve (
+            @if (user) {
+                @(user)
+            }
+            )`;
+
+      const html = render(testCode, {});
+      expect(html.trim()).toBeFalsy();
+    });
+
     it('should display Hello World in if block', () => {
       const testCode = `
             fn toggle (value) {

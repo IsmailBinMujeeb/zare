@@ -144,7 +144,11 @@ export default class Parser {
       // Final condition execution
       const fn = new Function(
         ...Object.keys(this.parameters || []),
-        `return ${condition}`,
+        `try {
+            return ${condition};
+          } catch (e) {
+            return false;
+          }`,
       );
       return fn(...Object.values(this.parameters || []));
     } catch (error) {
