@@ -1,5 +1,11 @@
 # zare
 
+## 3.4.1
+
+### Patch Changes
+
+- a8a7615: fix error while undefined parameter used in if condition
+
 ## 3.4.0
 
 ### Minor Changes
