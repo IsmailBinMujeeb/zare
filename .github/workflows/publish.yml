@@ -29,7 +29,7 @@ jobs:
         run: npm run coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           files: coverage/coverage-final.json
           flags: unittests
@@ -62,7 +62,7 @@ jobs:
         run: npm run docs:build
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload docs artifact
         uses: actions/upload-pages-artifact@v4
@@ -71,7 +71,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   release:
     if: github.ref == 'refs/heads/main' && github.repository == 'IsmailBinMujeeb/zare'
