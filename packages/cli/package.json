@@ -7,13 +7,13 @@
     "build": "tsc"
   },
   "dependencies": {
-    "chalk": "^5.6.2",
+    "chalk": "^6.0.0",
     "chokidar": "^5.0.0",
-    "commander": "^14.0.3",
+    "commander": "^15.0.0",
     "express": "^5.2.1",
-    "fs-extra": "^11.3.4",
-    "inquirer": "^13.3.2",
-    "ora": "^9.3.0",
+    "fs-extra": "^11.4.0",
+    "inquirer": "^14.0.2",
+    "ora": "^9.4.1",
     "zare": "^3.4.0"
   },
   "bin": {

@@ -19,18 +19,18 @@
     "format:check": "oxfmt --check"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.30.0",
-    "@commitlint/config-conventional": "^20.5.0",
+    "@changesets/cli": "^2.31.1",
+    "@commitlint/config-conventional": "^21.2.0",
     "@manypkg/get-packages": "^3.0.0",
     "@types/express": "^5.0.6",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^25.5.2",
-    "@vitest/coverage-v8": "^4.1.2",
-    "commitlint": "^20.5.0",
+    "@types/node": "^26.1.1",
+    "@vitest/coverage-v8": "^4.1.10",
+    "commitlint": "^21.2.1",
     "husky": "^9.1.7",
-    "oxfmt": "^0.43.0",
-    "turbo": "^2.9.4",
-    "typescript": "^6.0.2",
+    "oxfmt": "^0.60.0",
+    "turbo": "^2.10.7",
+    "typescript": "^7.0.2",
     "vitest": "^4.0.3"
   },
   "workspaces": [
